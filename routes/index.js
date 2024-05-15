@@ -13,6 +13,8 @@ const connection = mysql.createConnection({
 
 
 router.get('/', function (req, res, next) {
+  const userId = req.session.userid;
+  const isAuth = Boolean(userId);
   knex("tasks")
     .select("*")
     .then(function (results) {
@@ -20,12 +22,14 @@ router.get('/', function (req, res, next) {
       res.render('index', {
         title: 'ToDo App',
         todos: results,
+        isAuth: isAuth,
       });
     })
     .catch(function (err) {
       console.error(err);
       res.render('index', {
         title: 'ToDo App',
+        isAuth: isAuth,
       });
     });
 });
@@ -34,8 +38,10 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
   const todo = req.body.add;
+  const userId = req.session.userid;
+  const isAuth = Boolean(userid);
   knex("tasks")
-    .insert({user_id: 1, content: todo})
+    .insert({user_id: userId, content: todo})
     .then(function () {
       res.redirect('/')
     })
@@ -43,10 +49,12 @@ router.post('/', function (req, res, next) {
       console.error(err);
       res.render('index', {
         title: 'ToDo App',
+        isAuth: isAuth,
       });
     });
 });
 
 router.use('/signup',require('./signup'));
 router.use('/signin',require('./signin'));
+router.use('/logout',require('./logout'));
 module.exports = router;
