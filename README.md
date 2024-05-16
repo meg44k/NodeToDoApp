@@ -1,2 +1,3 @@
 # ToDoWebApp
-ToDo Web App to learn Node.js.
+
+NodeJsを用いたWebAppの開発の勉強用です
